@@ -1,52 +1,87 @@
 import { SignIn } from "@clerk/nextjs";
-import { Cpu, GitBranch, ShieldCheck, Sparkles } from "lucide-react";
+import { BrainCircuit, ScrollText, Share2 } from "lucide-react";
 
 export default function SignInPage() {
   return (
     <div className="flex min-h-screen w-full bg-base text-primary">
-      {/* Left panel: Minimal Info (hidden on small screens) */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between border-r border-border bg-surface p-12">
-        <div>
-          <div className="flex items-center gap-2 text-brand">
-            <Sparkles className="h-6 w-6 text-brand" />
-            <span className="text-xl font-bold tracking-tight text-primary">GhostAI</span>
+      {/* Left panel: Product Branding & Features (hidden on small screens) */}
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 lg:p-16 border-r border-border bg-base">
+        {/* Top Logo */}
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-black font-bold text-sm">
+            G
           </div>
-          <p className="mt-4 text-base text-secondary">
-            AI-powered collaborative workspace for technical system design and architecture graphs.
-          </p>
+          <span className="text-sm font-semibold tracking-tight text-primary">
+            Ghost AI
+          </span>
         </div>
 
-        <div className="space-y-6 my-auto py-8">
-          <div className="flex items-start gap-3">
-            <GitBranch className="h-5 w-5 text-brand shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-primary">Real-Time Architecture Canvas</p>
-              <p className="text-xs text-muted-foreground">Design system components, dataflows, and infrastructure topologies collaboratively.</p>
-            </div>
+        {/* Main Pitch & Feature List */}
+        <div className="my-auto max-w-lg space-y-8 py-10">
+          <div className="space-y-4">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary leading-[1.15]">
+              Design systems at the <br />
+              speed of thought.
+            </h1>
+            <p className="text-sm text-text-secondary leading-relaxed max-w-md">
+              Describe your architecture in plain English. Ghost AI maps it to a shared canvas your whole team can refine in real time.
+            </p>
           </div>
-          <div className="flex items-start gap-3">
-            <Cpu className="h-5 w-5 text-accent-ai-text shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-primary">AI-Assisted Graph Generation</p>
-              <p className="text-xs text-muted-foreground">Generate comprehensive architecture diagrams and technical specifications automatically.</p>
+
+          {/* Feature Badges */}
+          <div className="space-y-6 pt-2">
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-dim text-brand">
+                <BrainCircuit className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-primary">
+                  AI Architecture Generation
+                </h3>
+                <p className="mt-0.5 text-xs text-text-muted">
+                  Describe your system, AI maps it to nodes and edges on a live canvas.
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="h-5 w-5 text-state-success shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-primary">Secure Multi-Tenant Workspaces</p>
-              <p className="text-xs text-muted-foreground">Granular project access, secure token exchange, and persistent artifact storage.</p>
+
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-dim text-brand">
+                <Share2 className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-primary">
+                  Real-time Collaboration
+                </h3>
+                <p className="mt-0.5 text-xs text-text-muted">
+                  Live cursors, presence indicators, and shared node editing across your team.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-dim text-brand">
+                <ScrollText className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-primary">
+                  Instant Spec Generation
+                </h3>
+                <p className="mt-0.5 text-xs text-text-muted">
+                  Export a complete Markdown technical spec directly from the canvas graph.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="text-xs text-muted-foreground">
-          Built for software architects, engineering leads, and distributed teams.
+        {/* Bottom subtle text */}
+        <div className="text-xs text-text-faint">
+          © {new Date().getFullYear()} Ghost AI. All rights reserved.
         </div>
       </div>
 
       {/* Right panel: Centered Clerk form */}
-      <div className="flex flex-1 items-center justify-center p-6 lg:p-12">
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-12 bg-base">
         <SignIn />
       </div>
     </div>
