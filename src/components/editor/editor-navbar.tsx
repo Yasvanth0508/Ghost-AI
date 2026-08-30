@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -62,8 +63,32 @@ export function EditorNavbar({
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center justify-end">
-        {rightSlot}
+      <div className="flex items-center justify-end gap-3">
+        {rightSlot ?? (
+          <>
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm" className="text-xs font-medium">
+                  Sign In
+                </Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button size="sm" className="text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90">
+                  Sign Up
+                </Button>
+              </SignUpButton>
+            </Show>
+            <Show when="signed-in">
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "h-8 w-8",
+                  },
+                }}
+              />
+            </Show>
+          </>
+        )}
       </div>
     </header>
   );
