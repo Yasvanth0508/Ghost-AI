@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Phase 5: Prisma Database Models & Client
+- Phase 6: Project REST API Routes
 
 ## Current Goal
 
-- Prisma database models and singleton client setup complete. Ready for next feature unit.
+- Backend project API endpoints complete with Clerk authentication and ownership verification. Ready for next feature unit.
 
 ## Completed
 
@@ -17,6 +17,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - Feature Spec 03: Clerk Authentication (installed `@clerk/nextjs` & `@clerk/ui`, configured `ClerkProvider` with shadcn dark theme in RootLayout, created minimal two-panel sign-in & sign-up pages, configured `src/proxy.ts` with route protection and proxy matcher, added `UserButton` / `SignInButton` / `SignUpButton` to `EditorNavbar`, set up `/` redirect to `/editor` or `/sign-in`).
 - Feature Spec 04: Editor Home & Project Dialogs (implemented `/editor` minimal center home screen without cards, `CreateProjectDialog` with live slug preview, `RenameProjectDialog` with auto-focus and Enter submission, `DeleteProjectDialog` with destructive confirmation, owned vs shared project sidebar action menus with Rename/Delete, mobile backdrop scrim, and `useProjectDialogs` management hook).
 - Feature Spec 05: Prisma Database Layer (configured `prisma/schema.prisma` and `prisma/models/project.prisma` with `Project` and `ProjectCollaborator` models, status enum, indexes, and relations; created cached `src/lib/prisma.ts` singleton branching between `@prisma/adapter-pg` with `pg.Pool` and `@prisma/extension-accelerate`; generated Prisma Client).
+- Feature Spec 06: Project API Routes (created `GET /api/projects` and `POST /api/projects` with Clerk user ID ownership and fallback naming; created `PATCH /api/projects/[projectId]` and `DELETE /api/projects/[projectId]` enforcing 401 unauthorized and 403 non-owner forbidden mutations).
 
 ## In Progress
 
@@ -24,7 +25,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Feature Spec 06: Canvas Graph Foundation / Nodes & Edges
+- Feature Spec 07: Canvas Graph Foundation / Nodes & Edges
 
 ## Open Questions
 
