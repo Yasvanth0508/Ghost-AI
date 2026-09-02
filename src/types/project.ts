@@ -9,6 +9,28 @@ export interface SerializedProject {
   isOwner: boolean;
 }
 
+export interface ProjectCollaboratorEnriched {
+  id: string;
+  email: string;
+  name: string | null;
+  imageUrl: string | null;
+  createdAt: string;
+  isOwner?: boolean;
+}
+
+export interface CollaboratorOwnerInfo {
+  id: string;
+  email: string | null;
+  name: string | null;
+  imageUrl: string | null;
+}
+
+export interface CollaboratorsResponse {
+  isOwner: boolean;
+  owner: CollaboratorOwnerInfo;
+  collaborators: ProjectCollaboratorEnriched[];
+}
+
 export function formatRelativeTime(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
