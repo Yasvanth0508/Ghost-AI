@@ -150,7 +150,10 @@ export function ProjectSidebar({
                             <p className="font-medium text-xs truncate text-primary">
                               {project.name}
                             </p>
-                            <p className="text-[10px] text-muted-foreground truncate">
+                            <p
+                              suppressHydrationWarning
+                              className="text-[10px] text-muted-foreground truncate"
+                            >
                               {formatRelativeTime(project.updatedAt)}
                             </p>
                           </div>
@@ -239,7 +242,10 @@ export function ProjectSidebar({
                             <p className="font-medium text-xs truncate text-primary">
                               {project.name}
                             </p>
-                            <p className="text-[10px] text-muted-foreground truncate">
+                            <p
+                              suppressHydrationWarning
+                              className="text-[10px] text-muted-foreground truncate"
+                            >
                               Shared • {formatRelativeTime(project.updatedAt)}
                             </p>
                           </div>
