@@ -17,9 +17,10 @@ export interface CreateProjectDialogProps {
   onOpenChange: (open: boolean) => void;
   projectName: string;
   onProjectNameChange: (name: string) => void;
-  slugPreview: string;
+  roomIdPreview: string;
   onSubmit: (e?: React.FormEvent) => void;
   isLoading?: boolean;
+  error?: string | null;
 }
 
 export function CreateProjectDialog({
@@ -27,9 +28,10 @@ export function CreateProjectDialog({
   onOpenChange,
   projectName,
   onProjectNameChange,
-  slugPreview,
+  roomIdPreview,
   onSubmit,
   isLoading = false,
+  error,
 }: CreateProjectDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -38,7 +40,8 @@ export function CreateProjectDialog({
           <DialogHeader>
             <DialogTitle>Create Project</DialogTitle>
             <DialogDescription>
-              Start a new technical architecture design. Give your project a name to generate its workspace slug.
+              Start a new technical architecture design. Give your project a
+              name to generate its shared canvas workspace.
             </DialogDescription>
           </DialogHeader>
 
@@ -60,13 +63,17 @@ export function CreateProjectDialog({
               />
             </div>
 
-            {/* Live Slug Preview */}
+            {/* Live Room ID Preview */}
             <div className="rounded-xl border border-border bg-subtle p-3 text-xs">
-              <span className="text-muted-foreground">Workspace URL slug: </span>
-              <span className="font-mono text-brand">
-                {slugPreview ? `/${slugPreview}` : "/untitled-project"}
+              <span className="text-muted-foreground">
+                Liveblocks Room ID:{" "}
               </span>
+              <span className="font-mono text-brand">{roomIdPreview}</span>
             </div>
+
+            {error && (
+              <p className="text-xs text-destructive font-medium">{error}</p>
+            )}
           </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
@@ -80,10 +87,10 @@ export function CreateProjectDialog({
             </Button>
             <Button
               type="submit"
-              disabled={!projectName.trim() || isLoading}
+              disabled={isLoading}
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
             >
-              Create Project
+              {isLoading ? "Creating..." : "Create Project"}
             </Button>
           </DialogFooter>
         </form>

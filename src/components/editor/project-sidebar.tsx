@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import {
   FolderGit2,
   MoreVertical,
@@ -19,19 +20,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { ProjectItem } from "@/hooks/use-project-dialogs";
+import { formatRelativeTime, type SerializedProject } from "@/types/project";
 import { cn } from "@/lib/utils";
 
 export interface ProjectSidebarProps {
   isOpen: boolean;
   onClose?: () => void;
   onNewProject?: () => void;
-  myProjects?: ProjectItem[];
-  sharedProjects?: ProjectItem[];
-  onRenameProject?: (project: ProjectItem) => void;
-  onDeleteProject?: (project: ProjectItem) => void;
+  myProjects?: SerializedProject[];
+  sharedProjects?: SerializedProject[];
+  onRenameProject?: (project: SerializedProject) => void;
+  onDeleteProject?: (project: SerializedProject) => void;
   selectedProjectId?: string;
-  onSelectProject?: (project: ProjectItem) => void;
+  onSelectProject?: (project: SerializedProject) => void;
   className?: string;
 }
 
@@ -47,6 +48,17 @@ export function ProjectSidebar({
   onSelectProject,
   className,
 }: ProjectSidebarProps) {
+  const router = useRouter();
+
+  const handleProjectClick = (project: SerializedProject) => {
+    if (onSelectProject) {
+      onSelectProject(project);
+    } else {
+      router.push(`/editor/${project.id}`);
+      onClose?.();
+    }
+  };
+
   return (
     <>
       {/* Mobile Backdrop Scrim */}
@@ -124,7 +136,7 @@ export function ProjectSidebar({
                     return (
                       <div
                         key={project.id}
-                        onClick={() => onSelectProject?.(project)}
+                        onClick={() => handleProjectClick(project)}
                         className={cn(
                           "group flex items-center justify-between rounded-xl p-2.5 text-sm transition-colors cursor-pointer border border-transparent",
                           isSelected
@@ -139,7 +151,7 @@ export function ProjectSidebar({
                               {project.name}
                             </p>
                             <p className="text-[10px] text-muted-foreground truncate">
-                              {project.updatedAt}
+                              {formatRelativeTime(project.updatedAt)}
                             </p>
                           </div>
                         </div>
@@ -213,7 +225,7 @@ export function ProjectSidebar({
                     return (
                       <div
                         key={project.id}
-                        onClick={() => onSelectProject?.(project)}
+                        onClick={() => handleProjectClick(project)}
                         className={cn(
                           "group flex items-center justify-between rounded-xl p-2.5 text-sm transition-colors cursor-pointer border border-transparent",
                           isSelected
@@ -228,7 +240,7 @@ export function ProjectSidebar({
                               {project.name}
                             </p>
                             <p className="text-[10px] text-muted-foreground truncate">
-                              Shared • {project.updatedAt}
+                              Shared • {formatRelativeTime(project.updatedAt)}
                             </p>
                           </div>
                         </div>

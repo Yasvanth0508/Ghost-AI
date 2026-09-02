@@ -10,14 +10,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import type { ProjectItem } from "@/hooks/use-project-dialogs";
+import type { SerializedProject } from "@/types/project";
 
 export interface DeleteProjectDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  project: ProjectItem | null;
+  project: SerializedProject | null;
   onConfirm: () => void;
   isLoading?: boolean;
+  error?: string | null;
 }
 
 export function DeleteProjectDialog({
@@ -26,6 +27,7 @@ export function DeleteProjectDialog({
   project,
   onConfirm,
   isLoading = false,
+  error,
 }: DeleteProjectDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -37,9 +39,14 @@ export function DeleteProjectDialog({
             <span className="font-semibold text-primary">
               &ldquo;{project?.name}&rdquo;
             </span>
-            ? This action cannot be undone and will permanently remove the project canvas and its generated specs.
+            ? This action cannot be undone and will permanently remove the
+            project canvas and its generated specs.
           </DialogDescription>
         </DialogHeader>
+
+        {error && (
+          <p className="text-xs text-destructive font-medium pt-2">{error}</p>
+        )}
 
         <DialogFooter className="gap-2 sm:gap-0 mt-4">
           <Button
@@ -56,7 +63,7 @@ export function DeleteProjectDialog({
             onClick={onConfirm}
             disabled={isLoading}
           >
-            Delete Project
+            {isLoading ? "Deleting..." : "Delete Project"}
           </Button>
         </DialogFooter>
       </DialogContent>

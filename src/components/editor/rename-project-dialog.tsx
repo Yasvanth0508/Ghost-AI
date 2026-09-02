@@ -11,16 +11,17 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import type { ProjectItem } from "@/hooks/use-project-dialogs";
+import type { SerializedProject } from "@/types/project";
 
 export interface RenameProjectDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  project: ProjectItem | null;
+  project: SerializedProject | null;
   projectName: string;
   onProjectNameChange: (name: string) => void;
   onSubmit: (e?: React.FormEvent) => void;
   isLoading?: boolean;
+  error?: string | null;
 }
 
 export function RenameProjectDialog({
@@ -31,6 +32,7 @@ export function RenameProjectDialog({
   onProjectNameChange,
   onSubmit,
   isLoading = false,
+  error,
 }: RenameProjectDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -63,6 +65,10 @@ export function RenameProjectDialog({
                 disabled={isLoading}
               />
             </div>
+
+            {error && (
+              <p className="text-xs text-destructive font-medium">{error}</p>
+            )}
           </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
@@ -79,7 +85,7 @@ export function RenameProjectDialog({
               disabled={!projectName.trim() || isLoading}
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
             >
-              Save Changes
+              {isLoading ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>
