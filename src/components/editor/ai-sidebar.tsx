@@ -571,17 +571,29 @@ export function AiSidebar({ isOpen, onClose, roomId }: AiSidebarProps) {
   );
 
   return (
-    <aside
-      aria-label="AI Workspace"
-      className={cn(
-        "flex flex-col h-full border-l border-border bg-[#111114] shadow-2xl transition-all duration-300 ease-in-out shrink-0 overflow-hidden select-none",
-        isOpen
-          ? "w-80 sm:w-96 opacity-100"
-          : "w-0 opacity-0 border-l-0 pointer-events-none"
+    <>
+      {/* Mobile Backdrop Scrim */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden transition-opacity duration-200"
+          onClick={onClose}
+          aria-hidden="true"
+        />
       )}
-    >
-      {/* Sidebar Header - h-14 to match Navbar and Project Sidebar */}
-      <div className="flex h-14 items-center justify-between border-b border-border px-4 shrink-0 bg-[#111114]">
+
+      <aside
+        aria-label="AI Workspace"
+        aria-hidden={!isOpen}
+        className={cn(
+          "h-full flex flex-col border-l border-border bg-[#111114] shadow-2xl transition-all duration-300 ease-in-out shrink-0 select-none overflow-hidden",
+          "max-lg:fixed max-lg:top-14 max-lg:right-0 max-lg:bottom-0 max-lg:z-40",
+          isOpen
+            ? "w-80 sm:w-96 max-lg:w-[88vw] max-lg:max-w-sm opacity-100 max-lg:translate-x-0"
+            : "w-0 opacity-0 border-l-0 pointer-events-none max-lg:translate-x-full"
+        )}
+      >
+        {/* Sidebar Header - h-14 to match Navbar and Project Sidebar */}
+        <div className="flex h-14 items-center justify-between border-b border-border px-4 shrink-0 bg-[#111114]">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#00A300]/15 border border-[#00A300]/30 text-[#00A300]">
             <Bot className="h-4 w-4" />
@@ -1005,5 +1017,6 @@ export function AiSidebar({ isOpen, onClose, roomId }: AiSidebarProps) {
         initialContent={selectedSpec?.content}
       />
     </aside>
+    </>
   );
 }

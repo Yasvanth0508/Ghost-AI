@@ -149,46 +149,42 @@ export function SpecPreviewModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl w-[92vw] h-[85vh] flex flex-col p-0 gap-0 overflow-hidden bg-base border-border">
         {/* Modal Header */}
-        <DialogHeader className="p-5 pb-4 border-b border-border/70 flex flex-row items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-ai/15 text-accent-ai-text border border-accent-ai/20">
-              <FileCode2 className="h-5 w-5" />
+        <DialogHeader className="p-4 sm:p-5 pb-3 sm:pb-4 border-b border-border/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-accent-ai/15 text-accent-ai-text border border-accent-ai/20">
+              <FileCode2 className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div>
-              <DialogTitle className="text-base font-semibold text-primary">
+            <div className="min-w-0">
+              <DialogTitle className="text-sm sm:text-base font-semibold text-primary truncate max-w-[220px] sm:max-w-md">
                 {specTitle || "Technical Architecture Specification"}
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
                 <Calendar className="h-3 w-3 shrink-0" />
-                <span>Generated {formattedDate}</span>
-                {specId && (
-                  <span className="font-mono text-[10px] text-brand ml-1">
-                    · {specId}
-                  </span>
-                )}
+                <span className="truncate">{formattedDate}</span>
               </DialogDescription>
             </div>
           </div>
 
           {/* Header Action Buttons */}
-          <div className="flex items-center gap-2 mr-6">
+          <div className="flex items-center gap-2 mr-6 shrink-0">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={handleCopy}
               disabled={isLoading || !content}
-              className="h-8 gap-1.5 rounded-lg border-border text-xs text-primary hover:bg-subtle"
+              className="h-7 sm:h-8 gap-1.5 rounded-lg border-border text-xs text-primary hover:bg-subtle"
             >
               {isCopied ? (
                 <>
                   <Check className="h-3.5 w-3.5 text-accent-ai-text" />
-                  <span>Copied</span>
+                  <span className="text-xs">Copied</span>
                 </>
               ) : (
                 <>
                   <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span>Copy Markdown</span>
+                  <span className="text-xs hidden sm:inline">Copy Markdown</span>
+                  <span className="text-xs sm:hidden">Copy</span>
                 </>
               )}
             </Button>
@@ -198,14 +194,15 @@ export function SpecPreviewModal({
               size="sm"
               disabled={isLoading || isDownloading}
               onClick={handleDownload}
-              className="h-8 gap-1.5 rounded-lg bg-accent-ai text-white font-semibold hover:bg-accent-ai/90 text-xs shadow-sm cursor-pointer"
+              className="h-7 sm:h-8 gap-1.5 rounded-lg bg-brand text-black hover:bg-brand/90 font-medium text-xs transition-colors"
             >
               {isDownloading ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
                 <Download className="h-3.5 w-3.5" />
               )}
-              <span>Download (.md)</span>
+              <span className="text-xs hidden sm:inline">Download .md</span>
+              <span className="text-xs sm:hidden">Download</span>
             </Button>
           </div>
         </DialogHeader>

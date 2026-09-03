@@ -9,6 +9,7 @@ import {
   NodeToolbar,
   useReactFlow,
 } from "@xyflow/react";
+import { Pencil, Trash2 } from "lucide-react";
 import {
   CanvasNode,
   CanvasNodeShape,
@@ -28,7 +29,7 @@ export function CanvasNodeComponent({
   const customColor = data.color || DEFAULT_NODE_COLOR.fill;
   const customTextColor = data.textColor || DEFAULT_NODE_COLOR.text;
 
-  const { updateNodeData } = useReactFlow();
+  const { updateNodeData, deleteElements } = useReactFlow();
   const [isEditing, setIsEditing] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [hoveredColorId, setHoveredColorId] = React.useState<string | null>(null);
@@ -64,7 +65,7 @@ export function CanvasNodeComponent({
     setIsEditing(false);
   };
 
-  // Color toolbar
+  // Color & Actions toolbar
   const renderColorToolbar = () => (
     <NodeToolbar
       isVisible={selected}
@@ -73,8 +74,9 @@ export function CanvasNodeComponent({
       className="nodrag nopan nowheel z-30"
     >
       <div
-        className="flex items-center gap-1.5 rounded-full border border-border bg-surface/95 px-2 py-1 shadow-2xl backdrop-blur-md"
+        className="flex items-center gap-1 rounded-full border border-border bg-[#111114] px-2 py-1 shadow-2xl"
         onMouseDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
       >
         {NODE_COLORS.map((colorOption) => {
           const isActive = customColor.toLowerCase() === colorOption.fill.toLowerCase();
@@ -110,6 +112,35 @@ export function CanvasNodeComponent({
             </button>
           );
         })}
+
+        <div className="h-3.5 w-[1px] bg-border mx-0.5" />
+
+        {/* Mobile-Friendly Quick Actions: Edit Label & Delete */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsEditing(true);
+          }}
+          title="Edit Text"
+          className="flex h-5 w-5 items-center justify-center rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+        >
+          <Pencil className="h-3 w-3" />
+          <span className="sr-only">Edit text</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteElements({ nodes: [{ id }] });
+          }}
+          title="Delete Node"
+          className="flex h-5 w-5 items-center justify-center rounded-md text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors"
+        >
+          <Trash2 className="h-3 w-3" />
+          <span className="sr-only">Delete node</span>
+        </button>
       </div>
     </NodeToolbar>
   );

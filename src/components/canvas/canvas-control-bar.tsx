@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { Plus, Minus, Maximize2, Undo2, Redo2 } from "lucide-react";
@@ -33,7 +33,7 @@ export function CanvasControlBar() {
   return (
     <aside
       aria-label="Canvas Controls"
-      className="absolute bottom-6 left-6 z-20 flex items-center gap-1 rounded-full border border-border bg-surface/90 px-2 py-1 shadow-2xl backdrop-blur-md select-none nodrag nopan nowheel"
+      className="absolute bottom-16 sm:bottom-6 left-3 sm:left-6 z-20 flex items-center gap-1 rounded-full border border-border bg-[#111114] px-2 py-1 shadow-2xl select-none nodrag nopan nowheel"
     >
       {/* Zoom Controls */}
       <div className="flex items-center gap-0.5">

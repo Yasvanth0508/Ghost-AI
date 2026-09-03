@@ -337,6 +337,53 @@ function CanvasContent({
     []
   );
 
+  const handleAddShape = React.useCallback(
+    (shape: CanvasNodeShape, clientX?: number, clientY?: number) => {
+      const shapeDef = SHAPE_DEFINITIONS[shape];
+      const width = shapeDef?.defaultWidth ?? 140;
+      const height = shapeDef?.defaultHeight ?? 70;
+
+      let position: { x: number; y: number };
+      if (typeof clientX === "number" && typeof clientY === "number") {
+        position = screenToFlowPosition({ x: clientX, y: clientY });
+      } else {
+        const rect = containerRef.current?.getBoundingClientRect();
+        const centerScreenX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+        const centerScreenY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+        const offset = (counterRef.current % 5) * 15;
+        position = screenToFlowPosition({
+          x: centerScreenX + offset,
+          y: centerScreenY + offset,
+        });
+      }
+
+      counterRef.current += 1;
+      const nodeId = `${shape}-${Date.now()}-${counterRef.current}`;
+
+      const newNode: CanvasNode = {
+        id: nodeId,
+        type: CANVAS_NODE_TYPE,
+        position: {
+          x: position.x - width / 2,
+          y: position.y - height / 2,
+        },
+        data: {
+          label: "",
+          color: DEFAULT_NODE_COLOR.fill,
+          textColor: DEFAULT_NODE_COLOR.text,
+          shape,
+        },
+        style: {
+          width,
+          height,
+        },
+      };
+
+      onNodesChange([{ type: "add", item: newNode }]);
+    },
+    [screenToFlowPosition, onNodesChange]
+  );
+
   const onDrop = React.useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -356,53 +403,18 @@ function CanvasContent({
           defaultHeight?: number;
         };
 
-        const shape = payload.shape;
-        const shapeDef = SHAPE_DEFINITIONS[shape];
-        const width = payload.defaultWidth ?? shapeDef?.defaultWidth ?? 140;
-        const height = payload.defaultHeight ?? shapeDef?.defaultHeight ?? 70;
-
-        // Convert screen coordinates to canvas space
-        const position = screenToFlowPosition({
-          x: event.clientX,
-          y: event.clientY,
-        });
-
-        // Generate unique node ID: shape name, timestamp, and a counter
-        counterRef.current += 1;
-        const nodeId = `${shape}-${Date.now()}-${counterRef.current}`;
-
-        const newNode: CanvasNode = {
-          id: nodeId,
-          type: CANVAS_NODE_TYPE,
-          position: {
-            x: position.x - width / 2,
-            y: position.y - height / 2,
-          },
-          data: {
-            label: "",
-            color: DEFAULT_NODE_COLOR.fill,
-            textColor: DEFAULT_NODE_COLOR.text,
-            shape,
-          },
-          style: {
-            width,
-            height,
-          },
-        };
-
-        // Dispatch node creation to Liveblocks flow sync
-        onNodesChange([{ type: "add", item: newNode }]);
+        handleAddShape(payload.shape, event.clientX, event.clientY);
       } catch (err) {
         console.error("[CANVAS_DROP_ERROR]", err);
       }
     },
-    [screenToFlowPosition, onNodesChange]
+    [handleAddShape]
   );
 
   return (
     <div
       ref={containerRef}
-      className="relative h-full w-full bg-base overflow-hidden select-none"
+      className="relative h-full w-full bg-base overflow-hidden select-none touch-none"
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
@@ -424,6 +436,15 @@ function CanvasContent({
         }}
         connectionMode={ConnectionMode.Loose}
         fitView
+        panOnScroll={false}
+        panOnDrag={[1, 2]}
+        zoomOnPinch={true}
+        zoomOnDoubleClick={false}
+        autoPanOnNodeDrag={true}
+        autoPanOnConnect={true}
+        nodesDraggable={true}
+        nodesConnectable={true}
+        elementsSelectable={true}
         className="ghost-canvas"
         proOptions={{ hideAttribution: true }}
       >
@@ -449,6 +470,27 @@ function CanvasContent({
         onDragEnd={() => {
           setActiveDraggedShape(null);
           setDragPreview(null);
+        }}
+        onAddShape={(shape) => handleAddShape(shape)}
+        onTouchDragMove={(shape, clientX, clientY) => {
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const shapeDef = SHAPE_DEFINITIONS[shape];
+            const width = shapeDef?.defaultWidth ?? 140;
+            const height = shapeDef?.defaultHeight ?? 70;
+            setDragPreview({
+              shape,
+              width,
+              height,
+              x: clientX - rect.left,
+              y: clientY - rect.top,
+            });
+          }
+        }}
+        onTouchDragEnd={(shape, clientX, clientY) => {
+          setDragPreview(null);
+          setActiveDraggedShape(null);
+          handleAddShape(shape, clientX, clientY);
         }}
       />
 
