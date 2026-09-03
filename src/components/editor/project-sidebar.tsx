@@ -64,7 +64,7 @@ export function ProjectSidebar({
       {/* Mobile Backdrop Scrim */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-xs lg:hidden transition-opacity duration-200"
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden transition-opacity duration-200"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -74,24 +74,31 @@ export function ProjectSidebar({
         aria-label="Project Sidebar"
         aria-hidden={!isOpen}
         className={cn(
-          "absolute top-14 left-0 bottom-0 z-40 flex w-80 flex-col border-r border-border bg-surface/95 backdrop-blur-md shadow-2xl transition-transform duration-300 ease-in-out",
+          "h-full flex flex-col border-r border-border bg-[#111114] shadow-2xl transition-all duration-300 ease-in-out shrink-0 select-none overflow-hidden",
+          /* On mobile, use fixed drawer over canvas; on desktop (lg+), dock in flex layout */
+          "max-lg:fixed max-lg:top-14 max-lg:left-0 max-lg:bottom-0 max-lg:z-40",
           isOpen
-            ? "translate-x-0 pointer-events-auto"
-            : "-translate-x-full pointer-events-none",
+            ? "w-80 opacity-100 max-lg:translate-x-0"
+            : "w-0 opacity-0 border-r-0 pointer-events-none max-lg:-translate-x-full",
           className
         )}
       >
-        {/* Sidebar Header */}
-        <div className="flex h-12 items-center justify-between border-b border-border px-4">
-          <h2 className="text-sm font-semibold tracking-tight text-primary">
-            Projects
-          </h2>
+        {/* Sidebar Header - h-14 to match Navbar and AI Sidebar */}
+        <div className="flex h-14 items-center justify-between border-b border-border px-4 shrink-0 bg-[#111114]">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#00A300]/15 border border-[#00A300]/30 text-[#00A300]">
+              <FolderGit2 className="h-4 w-4" />
+            </div>
+            <h2 className="text-sm font-semibold tracking-tight text-white">
+              Projects
+            </h2>
+          </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
             aria-label="Close sidebar"
-            className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-accent transition-colors"
+            className="h-8 w-8 text-muted-foreground hover:text-white hover:bg-accent transition-colors"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -262,10 +269,10 @@ export function ProjectSidebar({
         </Tabs>
 
         {/* Sidebar Footer Action */}
-        <div className="border-t border-border p-4 bg-surface">
+        <div className="border-t border-border p-4 bg-[#111114] shrink-0">
           <Button
             onClick={onNewProject}
-            className="w-full gap-2 rounded-xl font-medium shadow-sm transition-all"
+            className="w-full gap-2 rounded-xl bg-[#00A300] text-black font-bold hover:bg-[#00A300]/90 shadow-sm transition-all cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>New Project</span>

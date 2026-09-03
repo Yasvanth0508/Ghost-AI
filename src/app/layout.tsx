@@ -1,17 +1,13 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Oswald } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const oswald = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -28,17 +24,17 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${oswald.variable} ${oswald.className} h-full antialiased`}
     >
       <body
         suppressHydrationWarning
-        className="min-h-full flex flex-col bg-base text-primary"
+        className="min-h-full flex flex-col bg-base text-primary font-sans"
       >
         <ClerkProvider
           appearance={{
             theme: shadcn,
             variables: {
-              colorPrimary: "var(--accent-primary)",
+              colorPrimary: "#00A300",
               colorBackground: "var(--bg-surface)",
               colorDanger: "var(--state-error)",
               colorSuccess: "var(--state-success)",
@@ -50,15 +46,15 @@ export default function RootLayout({
               headerTitle: "text-lg font-bold text-primary",
               headerSubtitle: "text-xs text-muted-foreground",
               formButtonPrimary:
-                "bg-brand text-[#080809] font-semibold hover:bg-brand/90 transition-colors rounded-xl",
+                "bg-[#00A300] text-black font-bold hover:bg-[#00A300]/90 transition-all rounded-xl shadow-sm",
               socialButtonsBlockButton:
                 "bg-elevated border border-border text-primary hover:bg-subtle transition-colors rounded-xl",
               socialButtonsBlockButtonText: "text-xs font-medium text-primary",
               formFieldLabel: "text-xs font-medium text-primary",
               formFieldInput:
-                "bg-elevated border-border text-primary placeholder:text-muted rounded-xl focus:border-brand focus:ring-brand",
+                "bg-elevated border-border text-primary placeholder:text-muted rounded-xl focus:border-[#00A300] focus:ring-[#00A300]",
               footerActionText: "text-xs text-muted-foreground",
-              footerActionLink: "text-xs text-brand hover:underline font-medium",
+              footerActionLink: "text-xs text-[#00A300] hover:underline font-semibold",
             },
           }}
         >

@@ -33,10 +33,10 @@ export function useShareDialog({
   const fetchCollaborators = React.useCallback(async () => {
     if (!projectId) return;
 
-    setIsLoading(true);
-    setError(null);
-
     try {
+      setIsLoading(true);
+      setError(null);
+
       const res = await fetch(`/api/projects/${projectId}/collaborators`);
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -57,14 +57,39 @@ export function useShareDialog({
   }, [projectId]);
 
   React.useEffect(() => {
+    let ignore = false;
+
     if (isOpen && projectId) {
-      fetchCollaborators();
-    } else if (!isOpen) {
-      setEmailInput("");
-      setError(null);
-      setIsCopied(false);
+      fetch(`/api/projects/${projectId}/collaborators`)
+        .then(async (res) => {
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || "Failed to load collaborators");
+          }
+          return res.json() as Promise<CollaboratorsResponse>;
+        })
+        .then((data) => {
+          if (!ignore) {
+            setIsOwner(data.isOwner);
+            setOwner(data.owner);
+            setCollaborators(data.collaborators);
+            setIsLoading(false);
+          }
+        })
+        .catch((err: unknown) => {
+          if (!ignore) {
+            const message =
+              err instanceof Error ? err.message : "Failed to load collaborators";
+            setError(message);
+            setIsLoading(false);
+          }
+        });
     }
-  }, [isOpen, projectId, fetchCollaborators]);
+
+    return () => {
+      ignore = true;
+    };
+  }, [isOpen, projectId]);
 
   const copyProjectLink = React.useCallback(() => {
     if (typeof window === "undefined") return;
