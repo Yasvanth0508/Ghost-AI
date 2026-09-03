@@ -4,10 +4,12 @@ const globalForLiveblocks = globalThis as unknown as {
   liveblocks: Liveblocks | undefined;
 };
 
+const rawSecret = process.env.LIVEBLOCKS_SECRET_KEY || "";
+const sanitizedSecret = rawSecret.replace(/^["'\s]+|["'\s]+$/g, "").trim();
+
 const secretKey =
-  process.env.LIVEBLOCKS_SECRET_KEY &&
-  process.env.LIVEBLOCKS_SECRET_KEY.startsWith("sk_")
-    ? process.env.LIVEBLOCKS_SECRET_KEY
+  sanitizedSecret && sanitizedSecret.startsWith("sk_")
+    ? sanitizedSecret
     : "sk_dev_placeholder_secret_key";
 
 export const liveblocks =
